@@ -16,7 +16,6 @@ describe('Register Use Case', () => {
     })
 
     expect(user.id).toEqual(expect.any(String))
-    // expect(user.id).toEqual('user-1')
   })
 
   it('should hash user password upon registration', async () => {
@@ -33,10 +32,8 @@ describe('Register Use Case', () => {
 
     expect(isPasswordCorrectlyHashed).toBe(true)
   })
-})
 
-describe('should not be able to register with same email twice', () => {
-  it('should hash user password upon registration', async () => {
+  it('should not be able to register with same email twice', async () => {
     const usersRepository = new InMemoryUsersRepository()
     const registerUseCase = new RegisterUseCase(usersRepository)
 
@@ -48,12 +45,12 @@ describe('should not be able to register with same email twice', () => {
       password: '12345',
     })
 
-    expect(async () => {
-      await registerUseCase.execute({
+    await expect(() =>
+      registerUseCase.execute({
         name: 'Romero',
         email,
         password: '12345',
-      })
-    }).rejects.toBeInstanceOf(UserAlreadyExistsError)
+      }),
+    ).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })
 })
